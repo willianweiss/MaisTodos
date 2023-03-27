@@ -53,13 +53,9 @@ A API foi construída usando FastAPI e utiliza SQLAlchemy como ORM para interagi
 cd MaisTodos`
 
 
-2. Construa a imagem Docker :
-  
-`make build`
+2. Construa a imagem Docker e inicie os serviços:
 
-3. Inicie os serviços:
-
-`make up`
+`make build-up`
 
   
 
