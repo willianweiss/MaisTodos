@@ -13,22 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Build the app
-      run: make build
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Test the app
-        run: |
-          docker-compose up -d
-          docker exec maistodos_api_1 bash -c "pytest -x --cov=api --cov-report=term-missing --cov-report=xml --cov-fail-under=80 --junitxml=report.xml --disable-warnings  --cov-config=.coveragerc"
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Lint the code
-        run: |
-          docker-compose up -d
-          docker exec -it maistodos_api_1 bash -c "black . --line-length 79 -t py37 --skip-string-normalization && isort . --multi-line=3 --trailing-comma --force-grid-wrap=0 --use-parentheses --line-width=88 -l 79"
+    - name: Check if image exists
+      run: |
+        IMAGE=$(docker images -q maistodos_api:latest)
+        if [ -z "$IMAGE" ]; then
+            make build
+        fi
+    - name: Run container
+      run: docker-compose up -d
+    - name: Test the app
+      run: |
+        docker exec maistodos_api_1 bash -c "pytest -x --cov=api --cov-report=term-missing --cov-report=xml --cov-fail-under=80 --junitxml=report.xml --disable-warnings  --cov-config=.coveragerc"
+    - name: Lint the code
+      run: |
+        docker exec -it maistodos_api_1 bash -c "black . --line-length 79 -t py37 --skip-string-normalization && isort . --multi-line=3 --trailing-comma --force-grid-wrap=0 --use-parentheses --line-width=88 -l 79"
