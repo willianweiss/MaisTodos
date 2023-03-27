@@ -22,8 +22,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: Test the app
         run: |
-          make build-up
-          make bash
+          docker-compose up -d
+          docker exec -it credit-card-api bash
           pytest -x --cov=api --cov-report=term-missing --cov-report=xml --cov-fail-under=80 --junitxml=report.xml --disable-warnings  --cov-config=.coveragerc
 
   lint:
@@ -32,6 +32,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Lint the code
         run: |
-          make build-up
-          make bash
+          docker-compose up -d
+          docker exec -it credit-card-api bash
           black . --line-length 79 -t py37 --skip-string-normalization && isort . --multi-line=3 --trailing-comma --force-grid-wrap=0 --use-parentheses --line-width=88 -l 79
