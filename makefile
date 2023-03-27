@@ -9,6 +9,9 @@ up:
 build-up:
 	docker-compose up -d --build
 
+bash:
+	docker-compose exec api bash
+	
 down:
 	docker-compose down
 

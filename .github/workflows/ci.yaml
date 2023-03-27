@@ -23,7 +23,8 @@ jobs:
       - name: Test the app
         run: |
           make build-up
-          make test
+          make bash
+          make test-cov
 
   lint:
     runs-on: ubuntu-latest
@@ -32,4 +33,5 @@ jobs:
       - name: Lint the code
         run: |
           make build-up
+          make bash
           make lint
